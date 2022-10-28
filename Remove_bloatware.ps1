@@ -168,5 +168,3 @@ Write-Host "Removing $to_remove ."
 Write-Host "======================================="
 Write-Host "---   Finished Removing Bloatware   ---"
 Write-Host "======================================="
-
-test
