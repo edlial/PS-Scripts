@@ -205,3 +205,10 @@ foreach ($Bloat in $installed_bloatwares) {
 Write-Host "======================================="
 Write-Host "---   Finished Removing Bloatware   ---"
 Write-Host "======================================="
+
+#TODO
+shto - test.bat
+shto - https://github.com/Sycnex/Windows10Debloater/blob/master/Windows10Debloater.ps1
+Remove Dell https://gist.github.com/mark05e/a79221b4245962a477a49eb281d97388
+Remove Lenovo - BROKERALL
+HP - ESG
