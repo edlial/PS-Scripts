@@ -14,6 +14,12 @@ $MyJsonVar = @"
     "script_version": "$latest_version"
 }
 "@
+    $penta_path = "C:\Program Files\5Q"
+    If(!(test-path -PathType container $penta_path))
+    {
+        New-Item -ItemType Directory -Path $penta_path
+    }
+
     $MyJsonVar | Out-File "C:\Program Files\5Q\info.json"
 } 
 
