@@ -1,39 +1,37 @@
-#
+#Install choco if it's not installed
+Get-PackageProvider -Name "Chocolatey" -ForceBootstrap
 
-
-$isUpgradeSuccess = $false
-try {
-    Start-Process powershell.exe -Verb RunAs -ArgumentList "-command winget upgrade --all  | Out-Host" -Wait -WindowStyle Normal
-    $isUpgradeSuccess = $true
+$LogFolder = "C:\Temp\5Q"
+If (Test-Path $LogFolder) {
+    Write-Output "$LogFolder exists. Skipping."
 }
-catch [System.InvalidOperationException] {
-    Write-Warning "Allow Yes on User Access Control to Upgrade"
+Else {
+    Write-Output "The folder '$LogFolder' doesn't exist. This folder will be used for storing logs created after the script runs. Creating now."
+    Start-Sleep 1
+    New-Item -Path "$LogFolder" -ItemType Directory
+    Write-Output "The folder $LogFolder was successfully created."
 }
-catch {
-    Write-Error $_.Exception
+
+Start-Transcript -OutputDirectory "$LogFolder"
+
+$to_install = @('7zip','notepadplusplus','git')
+$to_remove_choco = @('puppet-agent','googlechrome')
+$to_remove_winget = @('Puppet.puppet-agent','Google.Chrome')
+
+foreach ($package in $to_install) {
+    Write-Host "Installing $package."
+    choco install -y $package
 }
 
-$result = if ($isUpgradeSuccess) { "Upgrade Done" } else { "Upgrade was not succesful" }
-$result
+foreach ($package in $to_remove_winget) {
+    Write-Host "Winget is trying to remove $package."
+    winget uninstall -h $package
+}
 
-# #Uninstall
-# :Attempt Uninstalls
-# echo product where "name like 'TeamViewer%%'" call uninstall /nointeractive|wmic && shutdown /a
-# "%programfiles(x86)%\TeamViewer\uninstall.exe" /S
-# "%programfiles%\TeamViewer\uninstall.exe" /S
+foreach ($package in $to_remove_choco) {
+    Write-Host "Choco is trying to remove $package."
+    choco uninstall -y $package
+}
 
-# $TeamViewerGUID = Get-WmiObject win32_Product
-# if ($TeamViewerGUID.identifyingnumber -match "{2DCBADA6-474A-4EB4-BC2B-C379C7D53F26}")
-# {
-#   msiexec.exe /X "{2DCBADA6-474A-4EB4-BC2B-C379C7D53F26}" /qn /norestart
-# }
-
-
-# if ($TeamViewerGUID.identifyingnumber -notmatch "{2DCBADA6-474A-4EB4-BC2B-C379C7D53F26}")
-# {
-#     taskkill /im TeamViewer.exe /t /f
-#     Start-Sleep -Seconds 30
-#     msiexec.exe /X "{23170F69-40C1-2702-2201-000001000000}" /qn /norestart
-# }
-
-# msiexec.exe /X "{23170F69-40C1-2702-2201-000001000000}" /qn /norestart
+choco upgrade all
+winget upgrade --all -h

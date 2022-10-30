@@ -1021,6 +1021,3 @@ Write-Host "======================================="
 
 
 #Reference https://github.com/edlial/winutil/blob/main/Windows10Debloater.ps1
-shto - 
-Remove Dell
-Remove Lenovo 
