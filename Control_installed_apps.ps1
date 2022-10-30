@@ -1,5 +1,5 @@
 $latest_version = "1.0"
-$info_json = (Get-Content "C:\Temp\5Q\info.json" -Raw) | ConvertFrom-Json
+$info_json = (Get-Content "C:\Program Files\5Q\info.json" -Raw) | ConvertFrom-Json
 $local_version = $info_json.psobject.Properties.Where({ $_.Name -eq "script_version" }).Value
 
 if ($local_version -eq $latest_version) {
@@ -14,7 +14,7 @@ $MyJsonVar = @"
     "script_version": "$latest_version"
 }
 "@
-    $MyJsonVar | Out-File "C:\Temp\5Q\info.json"
+    $MyJsonVar | Out-File "C:\Program Files\5Q\info.json"
 } 
 
 
@@ -23,7 +23,7 @@ $MyJsonVar = @"
 # #Install choco if it's not installed
 # Get-PackageProvider -Name "Chocolatey" -ForceBootstrap
 
-# $LogFolder = "C:\Temp\5Q"
+# $LogFolder = "C:\Program Files\5Q"
 # If (Test-Path $LogFolder) {
 #     Write-Output "$LogFolder exists. Skipping."
 # }
