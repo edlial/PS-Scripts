@@ -40,14 +40,14 @@ else {
         choco install -y $package
     }
 
+    foreach ($package in $to_remove_choco) {
+        Write-Host "Choco is trying to remove $package."
+        choco uninstall -yx $package
+    }
+
     foreach ($package in $to_remove_winget) {
         Write-Host "Winget is trying to remove $package."
         winget uninstall -h $package
-    }
-
-    foreach ($package in $to_remove_choco) {
-        Write-Host "Choco is trying to remove $package."
-        choco uninstall -y $package
     }
 
     choco upgrade all
