@@ -1,4 +1,4 @@
-$latest_version = "1.0"
+$latest_version = "1.1"
 $penta_path = "C:\Program Files\5Q"
 $info_json = (Get-Content "$penta_path\info.json" -Raw) | ConvertFrom-Json
 $local_version = $info_json.psobject.Properties.Where({ $_.Name -eq "script_version" }).Value
@@ -11,7 +11,7 @@ else {
 #update json file locally
 $jsonVar = @"
 {
-    "script_name": "Control_installed_apps",
+    "script_name": "Installed_apps",
     "script_version": "$latest_version"
 }
 "@
@@ -23,12 +23,6 @@ $jsonVar = @"
 
     $jsonVar | Out-File "$penta_path\info.json"
 } 
-
-
-
-
-# #Install choco if it's not installed
-# Get-PackageProvider -Name "Chocolatey" -ForceBootstrap
 
 # $LogFolder = "$penta_path"
 # If (Test-Path $LogFolder) {
@@ -43,8 +37,11 @@ $jsonVar = @"
 
 # Start-Transcript -OutputDirectory "$LogFolder"
 
-# $to_install = @('7zip','notepadplusplus','git')
-# $to_remove_choco = @('puppet-agent','googlechrome')
+# #Install choco if it's not installed
+# Get-PackageProvider -Name "Chocolatey" -ForceBootstrap
+
+# $to_install = @('7zip','notepadplusplus','git') #Shto adobe
+# $to_remove_choco = @('puppet-agent','googlechrome') 
 # $to_remove_winget = @('Puppet.puppet-agent','Google.Chrome')
 
 # foreach ($package in $to_install) {
