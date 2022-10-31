@@ -22,18 +22,18 @@ else {
 
     $jsonVar | Out-File "$penta_path\Installed_apps_info.json"
 
-    Write-Host "======================================="
-    Write-Host "---       Start Managing Apps       ---"
-    Write-Host "======================================="
+    # Write-Host "======================================="
+    # Write-Host "---       Start Managing Apps       ---"
+    # Write-Host "======================================="
 
     Start-Transcript -OutputDirectory "$penta_path"
 
     #Install choco if it's not installed
     Get-PackageProvider -Name "Chocolatey" -ForceBootstrap
 
-    $to_install = @('7zip', 'notepadplusplus', 'git','adobereader') #Shto adobe
-    $to_remove_choco = @('puppet-agent', 'googlechrome') 
-    $to_remove_winget = @('Puppet.puppet-agent', 'Google.Chrome','Adobe.Acrobat.Reader.64-bit')
+    $to_install = @('7zip', 'adobereader')
+    $to_remove_choco = @('puppet-agent') 
+    $to_remove_winget = @('Puppet.puppet-agent')
 
     foreach ($package in $to_install) {
         Write-Host "Installing $package."
