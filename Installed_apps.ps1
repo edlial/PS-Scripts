@@ -1,4 +1,4 @@
-$latest_version = "1.1"
+$latest_version = "1.0"
 $penta_path = "C:\Program Files\5Q"
 $info_json = (Get-Content "$penta_path\Installed_apps_info.json" -Raw) | ConvertFrom-Json
 $local_version = $info_json.psobject.Properties.Where({ $_.Name -eq "script_version" }).Value
@@ -26,30 +26,30 @@ else {
     Write-Host "---       Start Managing Apps       ---"
     Write-Host "======================================="
 
-    # Start-Transcript -OutputDirectory "$penta_path"
+    Start-Transcript -OutputDirectory "$penta_path"
 
-    # #Install choco if it's not installed
-    # Get-PackageProvider -Name "Chocolatey" -ForceBootstrap
+    #Install choco if it's not installed
+    Get-PackageProvider -Name "Chocolatey" -ForceBootstrap
 
-    # $to_install = @('7zip', 'notepadplusplus', 'git') #Shto adobe
-    # $to_remove_choco = @('puppet-agent', 'googlechrome') 
-    # $to_remove_winget = @('Puppet.puppet-agent', 'Google.Chrome')
+    $to_install = @('7zip', 'notepadplusplus', 'git','adobereader') #Shto adobe
+    $to_remove_choco = @('puppet-agent', 'googlechrome') 
+    $to_remove_winget = @('Puppet.puppet-agent', 'Google.Chrome','Adobe.Acrobat.Reader.64-bit')
 
-    # foreach ($package in $to_install) {
-    #     Write-Host "Installing $package."
-    #     choco install -y $package
-    # }
+    foreach ($package in $to_install) {
+        Write-Host "Installing $package."
+        choco install -y $package
+    }
 
-    # foreach ($package in $to_remove_winget) {
-    #     Write-Host "Winget is trying to remove $package."
-    #     winget uninstall -h $package
-    # }
+    foreach ($package in $to_remove_winget) {
+        Write-Host "Winget is trying to remove $package."
+        winget uninstall -h $package
+    }
 
-    # foreach ($package in $to_remove_choco) {
-    #     Write-Host "Choco is trying to remove $package."
-    #     choco uninstall -y $package
-    # }
+    foreach ($package in $to_remove_choco) {
+        Write-Host "Choco is trying to remove $package."
+        choco uninstall -y $package
+    }
 
-    # choco upgrade all
-    # winget upgrade --all -h
+    choco upgrade all
+    winget upgrade --all -h
 }

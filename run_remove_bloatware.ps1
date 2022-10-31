@@ -1,0 +1,1 @@
+Invoke-WebRequest -useb https://raw.githubusercontent.com/edlial/PS-Scripts/zoja/Remove_bloatware.ps1 | Invoke-Expression
