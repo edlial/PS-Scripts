@@ -1,4 +1,4 @@
-$latest_version = "1.0"
+$latest_version = "1.1"
 $penta_path = "C:\Program Files\5Q"
 $info_json = (Get-Content "$penta_path\Installed_apps_info.json" -Raw) | ConvertFrom-Json
 $local_version = $info_json.psobject.Properties.Where({ $_.Name -eq "script_version" }).Value
@@ -22,9 +22,9 @@ else {
 
     $jsonVar | Out-File "$penta_path\Installed_apps_info.json"
 
-    # Write-Host "======================================="
-    # Write-Host "---       Start Managing Apps       ---"
-    # Write-Host "======================================="
+    Write-Host "======================================="
+    Write-Host "---       Start Managing Apps       ---"
+    Write-Host "======================================="
 
     Start-Transcript -OutputDirectory "$penta_path"
 
