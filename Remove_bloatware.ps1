@@ -172,7 +172,7 @@ else {
             "Viber"
             "Wallet"
             "Whiteboard"
-            "Windows.Photos"
+            #"Windows.Photos"
             "WindowsAlarms"
             "WindowsCamera"
             "windowscommunicationsapps"
@@ -765,7 +765,7 @@ else {
     }
 
     Function FixWhitelistedApps {
-    
+        
         If (!(Get-AppxPackage -AllUsers | Select-Object Microsoft.Paint3D, Microsoft.WindowsCalculator, Microsoft.WindowsStore, Microsoft.Windows.Photos)) {
     
             #Credit to abulgatz for these 4 lines of code
