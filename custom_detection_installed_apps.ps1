@@ -1,5 +1,5 @@
 $request = Invoke-WebRequest -URI https://raw.githubusercontent.com/edlial/PS-Scripts/zoja/Installed_apps.ps1
-$online_latest_version = $request.Content.Split([Environment]::NewLine) | Select -First 1
+$online_latest_version = $request.Content.Split([Environment]::NewLine) | Select-Object -First 1
 $online_latest_version.split('"')[1]
 
 $penta_path = "C:\Program Files\5Q"
