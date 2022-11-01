@@ -1,4 +1,4 @@
-$latest_version = "1.5"
+$latest_version = "1.6"
 $penta_path = "C:\Program Files\5Q"
 $info_json = (Get-Content "$penta_path\Installed_apps_info.json" -Raw) | ConvertFrom-Json
 $local_version = $info_json.psobject.Properties.Where({ $_.Name -eq "script_version" }).Value
@@ -69,7 +69,7 @@ else {
             $data = $get[1].assets | Where-Object name -Match 'msixbundle'
     
             $appx = $data.browser_download_url
-                
+
             #$data.assets[0].browser_download_url
             Write-Verbose "[$((Get-Date).TimeofDay)] $appx"
             If ($pscmdlet.ShouldProcess($appx, "Downloading asset")) {
