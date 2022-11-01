@@ -1,2 +1,2 @@
-1. Log to Windows events , change logfile name
+1. Log to Windows events , change logfile name - C:\ProgramData\chocolatey\logs\chocolatey.log
 2. Export logs to Azure log analytivs

@@ -1,4 +1,4 @@
-$latest_version = "1.1"
+$latest_version = "1.2"
 $penta_path = "C:\Program Files\5Q"
 $info_json = (Get-Content "$penta_path\Installed_apps_info.json" -Raw) | ConvertFrom-Json
 $local_version = $info_json.psobject.Properties.Where({ $_.Name -eq "script_version" }).Value
@@ -30,6 +30,7 @@ else {
 
     #Install choco if it's not installed
     Get-PackageProvider -Name "Chocolatey" -ForceBootstrap
+    Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
     $to_install = @('7zip', 'adobereader')
     $to_remove_choco = @('puppet-agent') 
