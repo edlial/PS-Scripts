@@ -1,4 +1,4 @@
-$latest_version = "1.3"
+$latest_version = "1.4"
 $penta_path = "C:\Program Files\5Q"
 $info_json = (Get-Content "$penta_path\Installed_apps_info.json" -Raw) | ConvertFrom-Json
 $local_version = $info_json.psobject.Properties.Where({ $_.Name -eq "script_version" }).Value
@@ -119,5 +119,5 @@ else {
     }
 
     choco upgrade all
-    winget upgrade --all -h
+    winget upgrade --all -h --accept-source-agreements --accept-package-agreements
 }
