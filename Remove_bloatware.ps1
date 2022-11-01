@@ -172,7 +172,7 @@ else {
             "Viber"
             "Wallet"
             "Whiteboard"
-            "Windows.Photos"
+            #"Windows.Photos"
             "WindowsAlarms"
             "WindowsCamera"
             "windowscommunicationsapps"
