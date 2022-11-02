@@ -1,2 +1,4 @@
-1. Log to Windows events , change logfile name - C:\ProgramData\chocolatey\logs\chocolatey.log
-2. Export logs to Azure log analytivs
+- Log to Windows events , change logfile name - C:\ProgramData\chocolatey\logs\chocolatey.log
+- Start scheduled task 
+- Export logs to Azure log analytivs
+- Skip list of apps
