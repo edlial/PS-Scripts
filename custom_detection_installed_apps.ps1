@@ -1,6 +1,6 @@
-$request = Invoke-WebRequest -URI https://raw.githubusercontent.com/edlial/PS-Scripts/zoja/Installed_apps.ps1
+$request = Invoke-WebRequest -URI https://raw.githubusercontent.com/edlial/PS-Scripts/zoja/Installed_apps.ps1 -UseBasicParsing
 $online_latest_version = $request.Content.Split([Environment]::NewLine) | Select-Object -First 1
-$online_latest_version.split('"')[1]
+$online_latest_version = $online_latest_version.split('"')[1]
 
 $penta_path = "C:\Program Files\5Q"
 $info_json = (Get-Content "$penta_path\Installed_apps_info.json" -Raw) | ConvertFrom-Json
