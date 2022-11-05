@@ -12,7 +12,8 @@ else {
     $jsonVar = @"
 {
     "script_name": "Installed_apps",
-    "script_version": "$latest_version"
+    "script_version": "$latest_version",
+    "computer_name" "$(hostname)"
 }
 "@
     

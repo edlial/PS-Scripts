@@ -1,4 +1,4 @@
-$latest_version = "1.4"
+$latest_version = "1.5"
 $penta_path = "C:\Program Files\5Q"
 $info_json = (Get-Content "$penta_path\Remove_bloatware_info.json" -Raw) | ConvertFrom-Json
 $local_version = $info_json.psobject.Properties.Where({ $_.Name -eq "script_version" }).Value
@@ -12,7 +12,8 @@ else {
     $jsonVar = @"
 {
     "script_name": "Remove_bloatware",
-    "script_version": "$latest_version"
+    "script_version": "$latest_version",
+    "computer_name" "$(hostname)"
 }
 "@
     
