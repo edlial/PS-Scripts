@@ -1,4 +1,4 @@
-$latest_version = "1.9"
+$latest_version = "2.0"
 $penta_path = "C:\Program Files\5Q"
 $info_json = (Get-Content "$penta_path\Installed_apps_info.json" -Raw) | ConvertFrom-Json
 $local_version = $info_json.psobject.Properties.Where({ $_.Name -eq "script_version" }).Value
@@ -32,28 +32,18 @@ else {
     Get-PackageProvider -Name "Chocolatey" -ForceBootstrap
     Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
-    #Install winget 
-    Add-AppxPackage https://github.com/microsoft/winget-cli/releases/download/v1.4.2161-preview/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
-
     $to_install = @('7zip', 'adobereader')
-    $to_remove_choco = @('puppet-agent') 
-    $to_remove_winget = @('Puppet.puppet-agent')
+    $to_remove = @('puppet-agent') 
 
     foreach ($package in $to_install) {
         Write-Host "Installing $package."
         choco install -y $package
     }
 
-    foreach ($package in $to_remove_choco) {
+    foreach ($package in $to_remove) {
         Write-Host "Choco is trying to remove $package."
         choco uninstall -yx $package
     }
 
-    foreach ($package in $to_remove_winget) {
-        Write-Host "Winget is trying to remove $package."
-        winget uninstall -h $package
-    }
-
     choco upgrade all
-    Winget upgrade --all -h
 }
