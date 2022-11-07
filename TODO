@@ -1,5 +1,4 @@
+- Migrate installed apps to choco
 - Log to Windows events , change logfile name - C:\ProgramData\chocolatey\logs\chocolatey.log
-- Start scheduled task 
-- Export logs to Azure log analytivs
-- Skip list of apps
-- add pc name in json file
+- Start scheduled task OR intune ? -> to decide
+- Export logs to Azure log analytics

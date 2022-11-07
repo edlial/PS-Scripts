@@ -1,4 +1,4 @@
-$latest_version = "1.5"
+$latest_version = "1.6"
 $penta_path = "C:\Program Files\5Q"
 $info_json = (Get-Content "$penta_path\Remove_bloatware_info.json" -Raw) | ConvertFrom-Json
 $local_version = $info_json.psobject.Properties.Where({ $_.Name -eq "script_version" }).Value
@@ -8952,7 +8952,7 @@ else {
         Write-Output "Removing CloudStore from registry if it exists"
         $CloudStore = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\CloudStore'
         If (Test-Path $CloudStore) {
-            Stop-Process Explorer.exe -Force
+            Stop-Process Explorer.exe -Force -ErrorAction SilentlyContinue
             Remove-Item $CloudStore -Recurse -Force
             Start-Process Explorer.exe -Wait
         }
@@ -9233,7 +9233,7 @@ else {
         $onedrive = "$env:SYSTEMROOT\SysWOW64\OneDriveSetup.exe"
         $ExplorerReg1 = "HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"
         $ExplorerReg2 = "HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"
-        Stop-Process -Name "OneDrive*"
+        Stop-Process -Name "OneDrive*" -Force 
         Start-Sleep 2
         If (!(Test-Path $onedrive)) {
             $onedrive = "$env:SYSTEMROOT\System32\OneDriveSetup.exe"
@@ -9242,7 +9242,7 @@ else {
             $onedrive = "$env:SYSTEMROOT\SysWOW64\OneDriveSetup.exe"
             $ExplorerReg1 = "HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"
             $ExplorerReg2 = "HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"
-            Stop-Process -Name "OneDrive*"
+            Stop-Process -Name "OneDrive*" -Force
             Start-Sleep 2
             If (!(Test-Path $onedrive)) {
                 $onedrive = "$env:SYSTEMROOT\System32\OneDriveSetup.exe"
@@ -9352,7 +9352,7 @@ else {
         }
 
         #Restart Explorer, open the start menu (necessary to load the new layout), and give it a few seconds to process
-        Stop-Process -name explorer
+        Stop-Process -name explorer -Force
         Start-Sleep -s 5
         $wshell = New-Object -ComObject wscript.shell; $wshell.SendKeys('^{ESCAPE}')
         Start-Sleep -s 5
@@ -9365,7 +9365,7 @@ else {
         }
 
         #Restart Explorer and delete the layout file
-        Stop-Process -name explorer
+        Stop-Process -name explorer -Force
 
         # Uncomment the next line to make clean start menu default for all new users
         #Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\

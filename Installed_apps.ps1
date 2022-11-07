@@ -29,22 +29,56 @@ else {
     Write-Host "---       Start Managing Apps       ---"
     Write-Host "======================================="
 
-    #Install choco if it's not installed
-    Get-PackageProvider -Name "Chocolatey" -ForceBootstrap
-    Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+    #get installed applications
+    $installedApps = Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion, PSChildName, UninstallString | Where-Object { $_.DisplayName -ne $null }
+    #get installed 64 bit applications
+    $installedApps64 = Get-ItemProperty HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion, PSChildName, UninstallString | Where-Object { $_.DisplayName -ne $null }
+    #combine the two
+    $installedApps = $installedApps + $installedApps64
 
-    $to_install = @('7zip', 'adobereader')
-    $to_remove = @('puppet-agent') 
+    $choco_installed_apps = $(choco list --local-only)
 
-    foreach ($package in $to_install) {
-        Write-Host "Installing $package."
-        choco install -y $package
+    #create array of applications to install using choco names
+    $apps_to_install = @('adobereader')
+
+    #create array of applications to uninstall
+    #using Win32 names
+    $appsToUninstall = @("vlc")
+    #using choco names
+    $choco_apps_to_uninstall = @("vlc")
+
+    #loop through applications to install
+    foreach ($app in $apps_to_install) {
+        #check if application is installed
+        if (($installedApps | Where-Object { $_.DisplayName -like $app }) -or ($choco_installed_apps | Select-String $app)) {
+            Write-Host "$app is already installed."
+        }
+        else {
+            Write-Host "Installing $app."
+            choco install -y -x --force $app
+        }
     }
 
-    foreach ($package in $to_remove) {
-        Write-Host "Choco is trying to remove $package."
-        choco uninstall -yx $package
+    #loop through appsToUninstall and uninstall the applications
+    foreach ($app in $appsToUninstall) {
+        $installedApps | Where-Object { $_.DisplayName -like "*$app*" } | ForEach-Object {        
+            if ($_.UninstallString -like "*MsiExec.exe*") {
+                Start-Process -FilePath "msiexec.exe" -ArgumentList "/x $($_.PSChildName) /qn" -Wait 
+            }
+            else {
+                Start-Process -FilePath $_.UninstallString -ArgumentList "/S" -Wait 
+            }
+        }
+    }
+
+    #loop through choco_apps_to_uninstall and uninstall the applications
+    foreach ($app in $choco_apps_to_uninstall) {
+        choco uninstall -x -y --force $app
     }
 
     choco upgrade all
+
+    Write-Host "======================================="
+    Write-Host "---     Finished Managing Apps      ---"
+    Write-Host "======================================="
 }
