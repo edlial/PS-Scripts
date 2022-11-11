@@ -1,4 +1,4 @@
-$latest_version = "2.0"
+$latest_version = "2.01"
 $penta_path = "C:\Program Files\5Q"
 $info_json = (Get-Content "$penta_path\Installed_apps_info.json" -Raw) | ConvertFrom-Json
 $local_version = $info_json.psobject.Properties.Where({ $_.Name -eq "script_version" }).Value
@@ -39,13 +39,13 @@ else {
     $choco_installed_apps = $(choco list --local-only)
 
     #create array of applications to install using choco names
-    $apps_to_install = @('adobereader')
+    $apps_to_install = @('adobereader','7zip','GoogleChrome','microsoft-edge','vlc','microsoft-teams.install')
 
     #create array of applications to uninstall
     #using Win32 names
-    $appsToUninstall = @("vlc")
+    $appsToUninstall = @("winrar")
     #using choco names
-    $choco_apps_to_uninstall = @("vlc")
+    $choco_apps_to_uninstall = @("winrar")
 
     #loop through applications to install
     foreach ($app in $apps_to_install) {
