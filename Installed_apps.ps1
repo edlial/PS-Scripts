@@ -1,4 +1,4 @@
-$latest_version = "2.01"
+$latest_version = "2.02"
 $penta_path = "C:\Program Files\5Q"
 $info_json = (Get-Content "$penta_path\Installed_apps_info.json" -Raw) | ConvertFrom-Json
 $local_version = $info_json.psobject.Properties.Where({ $_.Name -eq "script_version" }).Value
@@ -28,6 +28,16 @@ else {
     Write-Host "======================================="
     Write-Host "---       Start Managing Apps       ---"
     Write-Host "======================================="
+
+    #check if chocolatey is installed
+    if (Get-Command choco -ErrorAction SilentlyContinue) {
+        Write-Host "Chocolatey is installed !"
+    }
+    else {
+        Write-Host "Chocolatey is not installed !"
+        Write-Host "Installing Chocolatey !"
+        Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+    }
 
     #get installed applications
     $installedApps = Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion, PSChildName, UninstallString | Where-Object { $_.DisplayName -ne $null }
