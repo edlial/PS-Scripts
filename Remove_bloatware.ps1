@@ -1,4 +1,4 @@
-$latest_version = "1.8"
+$latest_version = "1.9"
 $penta_path = "C:\Program Files\5Q"
 $info_json = (Get-Content "$penta_path\Remove_bloatware_info.json" -Raw) | ConvertFrom-Json
 $local_version = $info_json.psobject.Properties.Where({ $_.Name -eq "script_version" }).Value
@@ -5088,6 +5088,11 @@ else {
             "{E2CAA395-66B3-4772-85E3-6134DBAB244E}"
             "{644B991F-B109-4360-9DA3-40CDAD13961C}"
             # Dell SupportAssist and Dell SupportAssist Remediation
+            "{10B1BCF9-4996-4270-A12D-1B1BFEEF979C}"
+            "{1344E072-D68B-48FF-BD2A-C1CCCC511A50}"
+            "{6DD27BB4-C350-414B-BC25-D33246605FB2}"
+            "{E530ABB7-9DCC-421B-B751-484375E8374A}"
+            "{E27862BD-4371-4245-896A-7EBE989B6F7F}"
             "{D5DA219C-155F-45A8-9736-B9350978F2BE}"
             "{A713BCAE-ED3C-43BA-834A-8D1E8773FF2C}"
             "{A10EE376-2100-432C-B534-29768465A12B}"
@@ -8606,8 +8611,10 @@ else {
 
         foreach ($Bloat in $Other_Bloatware) {
             Get-WmiObject win32_product -filter "IdentifyingNumber = '$Bloat'" |
-            if (($hostname).uninstall().returnvalue -eq 0) { write-host "Successfully uninstalled $Bloat from $($hostname)" }
-            else { write-warning "Failed to uninstall $Bloat from $($hostname)." }
+            if ($(hostname).uninstall().returnvalue -eq 0) { write-host "Successfully uninstalled $Bloat from $(hostname)" }
+            else { write-warning "Failed to uninstall $Bloat from $(hostname)." }
+
+            Start-Process -FilePath "msiexec.exe" -ArgumentList "/x $Bloat /qn" -Wait
         }
 
 
