@@ -1,4 +1,4 @@
-$latest_version = "1.9"
+$latest_version = "2.0"
 $penta_path = "C:\Program Files\5Q"
 $info_json = (Get-Content "$penta_path\Remove_bloatware_info.json" -Raw) | ConvertFrom-Json
 $local_version = $info_json.psobject.Properties.Where({ $_.Name -eq "script_version" }).Value
@@ -8610,11 +8610,7 @@ else {
         )
 
         foreach ($Bloat in $Other_Bloatware) {
-            Get-WmiObject win32_product -filter "IdentifyingNumber = '$Bloat'" |
-            if ($(hostname).uninstall().returnvalue -eq 0) { write-host "Successfully uninstalled $Bloat from $(hostname)" }
-            else { write-warning "Failed to uninstall $Bloat from $(hostname)." }
-
-            Start-Process -FilePath "msiexec.exe" -ArgumentList "/x $Bloat /qn" -Wait
+            Get-WmiObject win32_product -filter "IdentifyingNumber = '$Bloat'" | Start-Process -FilePath "msiexec.exe" -ArgumentList "/x $Bloat /qn" -Wait
         }
 
 
