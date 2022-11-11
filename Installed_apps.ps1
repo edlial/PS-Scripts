@@ -1,4 +1,4 @@
-$latest_version = "2.02"
+$latest_version = "2.03"
 $penta_path = "C:\Program Files\5Q"
 $info_json = (Get-Content "$penta_path\Installed_apps_info.json" -Raw) | ConvertFrom-Json
 $local_version = $info_json.psobject.Properties.Where({ $_.Name -eq "script_version" }).Value
@@ -13,7 +13,7 @@ else {
 {
     "script_name": "Installed_apps",
     "script_version": "$latest_version",
-    "computer_name" "$(hostname)"
+    "computer_name": "$(hostname)"
 }
 "@
     
