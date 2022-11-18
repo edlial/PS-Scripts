@@ -1,10 +1,10 @@
-$latest_version = "2.04"
+$latest_version = "2.05"
 $penta_path = "C:\Program Files\5Q"
 $info_json = (Get-Content "$penta_path\Installed_apps_info.json" -Raw) | ConvertFrom-Json
 $local_version = $info_json.psobject.Properties.Where({ $_.Name -eq "script_version" }).Value
 
 if ($local_version -eq $latest_version) {
-    Write-Host "Script is already up to date !"
+    Write-Host "[ $(hostname) ] Script is already up to date !"
 }
 else {
     Write-Host "Applying Updates !"

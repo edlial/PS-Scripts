@@ -4,7 +4,7 @@ $info_json = (Get-Content "$penta_path\Remove_bloatware_info.json" -Raw) | Conve
 $local_version = $info_json.psobject.Properties.Where({ $_.Name -eq "script_version" }).Value
 
 if ($local_version -eq $latest_version) {
-    Write-Host "Script is already up to date !"
+    Write-Host "[ $(hostname) ] Script is already up to date !"
 }
 else {
     Write-Host "Applying Updates !"
