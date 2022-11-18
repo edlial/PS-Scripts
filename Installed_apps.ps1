@@ -1,4 +1,4 @@
-$latest_version = "2.03"
+$latest_version = "2.04"
 $penta_path = "C:\Program Files\5Q"
 $info_json = (Get-Content "$penta_path\Installed_apps_info.json" -Raw) | ConvertFrom-Json
 $local_version = $info_json.psobject.Properties.Where({ $_.Name -eq "script_version" }).Value
@@ -27,6 +27,7 @@ else {
 
     Write-Host "======================================="
     Write-Host "---       Start Managing Apps       ---"
+    Write-Host "---           $(hostname)           ---"
     Write-Host "======================================="
 
     #check if chocolatey is installed
@@ -90,5 +91,6 @@ else {
 
     Write-Host "======================================="
     Write-Host "---     Finished Managing Apps      ---"
+    Write-Host "---           $(hostname)           ---"
     Write-Host "======================================="
 }

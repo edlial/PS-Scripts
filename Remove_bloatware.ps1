@@ -25,6 +25,7 @@ else {
 
     Write-Host "======================================="
     Write-Host "---    Start Removing Bloatware     ---"
+    Write-Host "---           $(hostname)           ---"
     Write-Host "======================================="
 
     #This function finds any AppX/AppXProvisioned package and uninstalls it, except for Freshpaint, Windows Calculator, Windows Store, and Windows Photos.
@@ -208,12 +209,32 @@ else {
             "{E530ABB7-9DCC-421B-B751-484375E8374A}"
             "{10B1BCF9-4996-4270-A12D-1B1BFEEF979C}"
             "{E27862BD-4371-4245-896A-7EBE989B6F7F}"
+            "{900D0BCD-0B86-4DAA-B639-89BE70449569}"
+            "{08E7C8D5-F2B5-4F09-B0EA-F28913BEFDB0}"
+            "{E0659C89-D276-4B77-A5EC-A8F2F042E78F}"
+            "{286A9ADE-A581-43E8-AA85-6F5D58C7DC88}"
+            "{a0d5bbde-c013-48ba-b98a-ca0ff5cf36a6}"
+            "{e178914d-07c9-4d17-bd20-287c78ecc0f1}"
         )
 
-        foreach ($Bloat in $Other_Bloatware) {
-            Get-WmiObject win32_product -filter "IdentifyingNumber = '$Bloat'" | Start-Process -FilePath "msiexec.exe" -ArgumentList "/x $Bloat /qn" -Wait
-        }
+        #get installed applications
+        $installedApps = Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion, PSChildName, UninstallString | Where-Object { $_.DisplayName -ne $null }
+        #get installed 64 bit applications
+        $installedApps64 = Get-ItemProperty HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion, PSChildName, UninstallString | Where-Object { $_.DisplayName -ne $null }
+        #combine the two
+        $installedApps = $installedApps + $installedApps64
 
+        foreach ($Bloat in $Other_Bloatware) {
+            $installedApps | Where-Object { $_.PSChildName -like "*$Bloat*" } | ForEach-Object {  
+                Write-Host "Uninstalling $($_.PSChildName) ..." -ForegroundColor Green      
+                if ($_.UninstallString -like "*MsiExec.exe*") {
+                    Start-Process -FilePath "msiexec.exe" -ArgumentList "/x $($_.PSChildName) /qn" -Wait 
+                }
+                else {
+                    Start-Process -FilePath $_.UninstallString -ArgumentList "/S" -Wait 
+                }
+            }
+        }
 
         # ## Teams Removal - Source: https://github.com/asheroto/UninstallTeams
         # function getUninstallString($match) {
@@ -1051,6 +1072,7 @@ else {
 
     Write-Host "======================================="
     Write-Host "---   Finished Removing Bloatware   ---"
+    Write-Host "---           $(hostname)           ---"
     Write-Host "======================================="
 
 } 
