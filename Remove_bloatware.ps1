@@ -25,7 +25,7 @@ else {
 
     Write-Host "======================================="
     Write-Host "---    Start Removing Bloatware     ---"
-    Write-Host "---           $(hostname)           ---"
+    Write-Host "           $(hostname)                 "
     Write-Host "======================================="
 
     #This function finds any AppX/AppXProvisioned package and uninstalls it, except for Freshpaint, Windows Calculator, Windows Store, and Windows Photos.
@@ -1072,7 +1072,7 @@ else {
 
     Write-Host "======================================="
     Write-Host "---   Finished Removing Bloatware   ---"
-    Write-Host "---           $(hostname)           ---"
+    Write-Host "           $(hostname)                 "
     Write-Host "======================================="
 
 } 

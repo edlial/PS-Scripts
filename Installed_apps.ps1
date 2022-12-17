@@ -27,7 +27,7 @@ else {
 
     Write-Host "======================================="
     Write-Host "---       Start Managing Apps       ---"
-    Write-Host "---           $(hostname)           ---"
+    Write-Host "           $(hostname)                 "
     Write-Host "======================================="
 
     #check if chocolatey is installed
@@ -91,6 +91,6 @@ else {
 
     Write-Host "======================================="
     Write-Host "---     Finished Managing Apps      ---"
-    Write-Host "---           $(hostname)           ---"
+    Write-Host "           $(hostname)                 "
     Write-Host "======================================="
 }
