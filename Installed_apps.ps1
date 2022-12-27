@@ -46,37 +46,29 @@ else {
     $installedApps64 = Get-ItemProperty HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion, PSChildName, UninstallString | Where-Object { $_.DisplayName -ne $null }
     #combine the two
     $installedApps = $installedApps + $installedApps64
-
     $choco_installed_apps = $(choco list --local-only)
 
+
     #create array of applications to install using choco names
-    $apps_to_install = @('adobereader','7zip','GoogleChrome','microsoft-edge','vlc','microsoft-teams.install')
+    $apps_to_install = @('adobereader','7zip','GoogleChrome','microsoft-edge','vlc')
 
     #create array of applications to uninstall
     #using Win32 names
-    $appsToUninstall = @("winrar")
+    $appsToUninstall = @("winrar","Adobe Acrobat","7-Zip","Google Chrome","Microsoft Edge","VLC")
     #using choco names
-    $choco_apps_to_uninstall = @("winrar")
+    $choco_apps_to_uninstall = @("winrar","adobereader","7zip","GoogleChrome","microsoft-edge","vlc")
 
-    #loop through applications to install
-    foreach ($app in $apps_to_install) {
-        #check if application is installed
-        if (($installedApps | Where-Object { $_.DisplayName -like $app }) -or ($choco_installed_apps | Select-String $app)) {
-            Write-Host "$app is already installed."
-        }
-        else {
-            Write-Host "Installing $app."
-            choco install -y -x --force $app
-        }
-    }
+    
 
     #loop through appsToUninstall and uninstall the applications
     foreach ($app in $appsToUninstall) {
         $installedApps | Where-Object { $_.DisplayName -like "*$app*" } | ForEach-Object {        
             if ($_.UninstallString -like "*MsiExec.exe*") {
+                Write-Host "Uninstalling $($_.DisplayName)."
                 Start-Process -FilePath "msiexec.exe" -ArgumentList "/x $($_.PSChildName) /qn" -Wait 
             }
             else {
+                Write-Host "Uninstalling $($_.DisplayName)."
                 Start-Process -FilePath $_.UninstallString -ArgumentList "/S" -Wait 
             }
         }
@@ -84,10 +76,24 @@ else {
 
     #loop through choco_apps_to_uninstall and uninstall the applications
     foreach ($app in $choco_apps_to_uninstall) {
+        write-host "Uninstalling $app."
         choco uninstall -x -y --force $app
     }
 
-    choco upgrade all
+    #loop through applications to install
+    foreach ($app in $apps_to_install) {
+        choco install -y -x --force $app
+        # #check if application is installed
+        # if (($installedApps | Where-Object { $_.DisplayName -like $app }) -or ($choco_installed_apps | Select-String $app)) {
+        #     Write-Host "$app is already installed."
+        # }
+        # else {
+        #     Write-Host "Installing $app."
+        #     choco install -y -x --force $app
+        # }
+    }
+
+    choco upgrade all -y
 
     Write-Host "======================================="
     Write-Host "---     Finished Managing Apps      ---"

@@ -1,7 +1,5 @@
-
-
 #create array of computers from above items
-$computers = @('zoadm002', 'labospedale04', 'zoamb019', 'zoamb005', 'zolog006', 'zoamb006', 'ambulatorio02', 'zoamb003', 'zolog002', 'zobop004', 'zolog005', 'zorec003', 'zorec006', 'zohos002', 'zolab002', 'zolog007', 'zoamb013', 'desktop-pq1qo1f', 'zorec007', 'amm01', 'zoamb007', 'zorad006', 'zorad005', 'zoamb008', 'zorec005', 'pcamm001', 'zorec002', 'labospedale02', 'zodir002', 'zobop001', 'zoadm001', 'zoamb018', 'zorad001', 'zorad003', 'zolog008', 'zorec001', 'pcosp6', 'zolab003', 'zoamb001', 'magazzinoosp', 'zorec004', 'zorec008', 'zolog001', 'zoamb014', 'zolab001', 'pcosp05', 'zolog003', 'zorad004', 'labospedale03', 'zoamb011', 'labospedale', 'zobop003', 'zoamb017', 'zoamb002', 'zohos003', 'zobop002', 'labistologia')
+$computers = @('AMM01','PCAMM001','SUPPORT','ZOADM001','ZOADM002','ZOADM003','ZOAMB001','ZOAMB002','ZOAMB003','ZOAMB004','ZOAMB005','ZOAMB006','ZOAMB007','ZOAMB008','ZOAMB009','ZOAMB011','ZOAMB013','ZOAMB014','ZOAMB016','ZOAMB017','ZOAMB018','ZOAMB019','ZOAMB020','ZOBOP001','ZOBOP002','ZOBOP003','ZOBOP004','ZOBOP005','ZOBOP006','ZOBOP007','ZOBOP008','ZOBOP009','ZOBOPVM','ZODIR002','ZOHOS002','ZOHOS003','ZOLAB001','ZOLAB002','ZOLAB003','ZOLOG001','ZOLOG002','ZOLOG003','ZOLOG004','ZOLOG005','ZOLOG006','ZOLOG007','ZOLOG008','ZOPOL004','ZORAD001','ZORAD002','ZORAD003','ZORAD004','ZORAD005','ZORAD006','ZOREC001','ZOREC002','ZOREC003','ZOREC004','ZOREC005','ZOREC006','ZOREC007','ZOREC008','ZOREC009')
 
 #loop through computers and ping them
 foreach ($computer in $computers) {
@@ -13,7 +11,7 @@ foreach ($computer in $computers) {
         try {
             $session = Enter-PSSession -ComputerName $computer -ErrorAction SilentlyContinue
             if ($?) {
-                Write-Host "[ $computer ] Enter-PSSession works" -ForegroundColor Green
+                #Write-Host "[ $computer ] Enter-PSSession works" -ForegroundColor Green
                 #close session
                 Exit-PSSession
 
@@ -24,8 +22,16 @@ foreach ($computer in $computers) {
                 #Copy-Item –Path \\mecm\Microsoft365Apps\setup.exe –Destination 'C:\Program Files\5Q\' –ToSession (New-PSSession –ComputerName $computer) 
                 #Copy-Item –Path \\mecm\Microsoft365Apps\A1.xml –Destination 'C:\Program Files\5Q\' –ToSession (New-PSSession –ComputerName $computer)
 
-                #run script on computer and wait for it to finish
-                #Invoke-Command -ComputerName $computer -ScriptBlock {  cd 'C:\Program Files\5Q\' ; .\setup.exe /configure .\A1.xml }
+                #check adobe version
+                #Write-Host "[ $computer ] Checking vlc version" -ForegroundColor Green
+                $result = Invoke-Command -ComputerName $computer -ScriptBlock {  choco list --local-only | Select-String adobereader ; $installedApps = Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion, PSChildName, UninstallString | Where-Object { $_.DisplayName -ne $null } ;
+                #get installed 64 bit applications
+                $installedApps64 = Get-ItemProperty HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion, PSChildName, UninstallString | Where-Object { $_.DisplayName -ne $null } ;
+                #combine the two
+                $installedApps = $installedApps + $installedApps64 ;
+                $installedApps | Select-String "Adobe Acrobat" ;
+                }
+                Write-Host $result
 
                 #remove script from computer
                 #  Write-Host "[ $computer ] Removing script" -ForegroundColor Green
@@ -41,12 +47,14 @@ foreach ($computer in $computers) {
         catch {
             Write-Host "[ $computer ] could not connect via enter-pssession" -ForegroundColor Red
         }
-
-        
-
     }
     else {
         #color red
         Write-Host "[ $computer ] is offline" -ForegroundColor Red
     }
-}
+} 
+
+
+#MYSQL
+
+
