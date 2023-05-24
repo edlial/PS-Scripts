@@ -1,4 +1,4 @@
-$latest_version = "2.0"
+$latest_version = "2.1"
 $penta_path = "C:\Program Files\5Q"
 $info_json = (Get-Content "$penta_path\Remove_bloatware_info.json" -Raw) | ConvertFrom-Json
 $local_version = $info_json.psobject.Properties.Where({ $_.Name -eq "script_version" }).Value
@@ -181,7 +181,7 @@ else {
             "WindowsFeedbackHub"
             "WindowsMaps"
             "WindowsPhone"
-            "WindowsSoundRecorder"
+            #"WindowsSoundRecorder"
             "WinZipComputing.WinZipUniversal"
             "Wunderlist"
             "Xbox.TCUI"
